@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#160d27">
+<title>A Diwali Surprise for Sanchita</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Georgia,serif;color:#fff7e8;background:radial-gradient(circle at 50% 15%,#56306d 0,#241331 42%,#100b1a 100%);overflow-x:hidden;text-align:center}
+main{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 18px;position:relative;z-index:2}
+.glow{color:#ffd98a;text-shadow:0 0 12px #ffbd59,0 0 28px #d97932}
+.kicker{letter-spacing:3px;text-transform:uppercase;font:12px Arial,sans-serif;color:#f8d9b0}
+h1{font-size:clamp(36px,10vw,58px);margin:12px 0 8px}
+.sub{font:15px Arial,sans-serif;color:#f1dce8;line-height:1.6;max-width:330px}
+.gift-wrap{margin:34px 0 18px;cursor:pointer;user-select:none;transition:transform .25s}
+.gift-wrap:active{transform:scale(.96)}
+.gift{width:150px;height:115px;position:relative;margin:0 auto;filter:drop-shadow(0 12px 22px #0008)}
+.box{position:absolute;bottom:0;width:150px;height:88px;border-radius:8px;background:linear-gradient(110deg,#a91d48,#e44e69,#94143b);border:2px solid #ffcf78}
+.lid{position:absolute;top:13px;left:-8px;width:166px;height:27px;border-radius:7px;background:linear-gradient(90deg,#d9a344,#ffe19a,#c68a2c);z-index:3;transition:transform .8s,top .8s}
+.ribbon-v{position:absolute;left:63px;top:13px;width:25px;height:100px;background:linear-gradient(90deg,#e6ad43,#fff0b0,#c68a2c);z-index:2}
+.bow{position:absolute;top:-3px;left:56px;width:38px;height:25px;border:8px solid #ffe09a;border-radius:50%;z-index:4}
+.gift-wrap.open .lid{transform:translateY(-65px) rotate(-13deg)}
+.gift-wrap.open .bow{transform:translateY(-65px) rotate(-13deg);transition:transform .8s}
+.tap{font:13px Arial,sans-serif;color:#ffe3b1;letter-spacing:1px}
+.message{display:none;max-width:440px;margin:24px auto 0;padding:24px 20px;border:1px solid #d9a75b;border-radius:20px;background:#21152cdd;box-shadow:0 0 35px #d68a4730;animation:rise .9s ease both}
+.message.show{display:block}
+.message h2{color:#ffda8d;font-size:clamp(25px,7vw,34px);margin:0 0 15px}
+.message p{font:15px/1.8 Arial,sans-serif;color:#fff1e7;margin:10px 0}
+.signature{color:#ffd98a!important;font-weight:bold}
+footer{font:11px Arial,sans-serif;color:#c7a9c9;margin-top:24px;letter-spacing:1px}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.lamp{position:fixed;bottom:12px;font-size:27px;opacity:.9}
+.left{left:14px}.right{right:14px}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="lamp left">🪔</div><div class="lamp right">🪔</div>
+<main>
+  <div class="kicker">A little festival surprise made just for you</div>
+  <h1 class="glow">Hye Sanchita ✨</h1>
+  <p class="sub">This Diwali, I have a tiny surprise waiting for you.<br>Ready to open it?</p>
+  <div class="gift-wrap" id="gift" role="button" tabindex="0" aria-label="Open your Diwali gift">
+    <div class="gift"><div class="lid"></div><div class="bow"></div><div class="box"></div><div class="ribbon-v"></div></div>
+  </div>
+  <div class="tap" id="tap">TAP THE GIFT TO OPEN 🎁</div>
+  <section class="message" id="message">
+    <h2>🪔 Happy Diwali, My Love 🪔</h2>
+    <p><strong>My love, my life, my everything. ❤️</strong></p>
+    <p>You make my ordinary days feel special, and your smile is my favourite light. May this Diwali fill your life with happiness, peace, sweet surprises and endless reasons to smile.</p>
+    <p>And no matter how many lights shine tonight, you'll always be the brightest little part of my world. Keep smiling, keep shining, and never forget how special you are to me. ❤️🧿</p>
+    <p class="signature">Forever yours,<br>Tushar ❤️</p>
+    <p class="signature">Tushar × Sanchita | #2213</p>
+  </section>
+  <footer>MADE WITH LOVE • THIS SURPRISE IS YOURS</footer>
+</main>
+<script>
+const gift=document.getElementById('gift'), msg=document.getElementById('message'), tap=document.getElementById('tap');
+const canvas=document.getElementById('fx'),ctx=canvas.getContext('2d');let particles=[],active=false;
+function resize(){canvas.width=innerWidth*devicePixelRatio;canvas.height=innerHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+addEventListener('resize',resize);resize();
+function burst(x,y){for(let i=0;i<75;i++){let a=Math.random()*Math.PI*2,s=1.5+Math.random()*5;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:65+Math.random()*35,h:30+Math.random()*45,r:1.5+Math.random()*2})}}
+function frame(){ctx.clearRect(0,0,innerWidth,innerHeight);particles=particles.filter(p=>p.life>0);for(const p of particles){p.x+=p.vx;p.y+=p.vy;p.vy+=.035;p.vx*=.99;p.life--;ctx.fillStyle=`hsla(${p.h},100%,65%,${Math.min(1,p.life/35)})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}if(active&&Math.random()<.08)burst(Math.random()*innerWidth,Math.random()*innerHeight*.55);requestAnimationFrame(frame)}
+frame();
+function openGift(){if(gift.classList.contains('open'))return;gift.classList.add('open');tap.textContent='A LITTLE MAGIC JUST FOR YOU ✨';setTimeout(()=>{msg.classList.add('show');burst(innerWidth/2,innerHeight*.35);burst(innerWidth*.25,innerHeight*.25);burst(innerWidth*.75,innerHeight*.25);active=true},650)}
+gift.addEventListener('click',openGift);gift.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openGift()}});
+</script>
+</body>
+</html>
